@@ -1,6 +1,5 @@
 #include <gl/glut.h>
 
-bool fullscreen = false;
 bool mouseDown = false;
 
 float xrot = 0.0f;
@@ -8,6 +7,61 @@ float yrot = 0.0f;
 
 float xdiff = 0.0f;
 float ydiff = 0.0f;
+
+float scale = 1.0f;
+float xmovement = 0.0f;
+float ymovement = 0.0f;
+float zmovement = 0.0f;
+
+class myObject {
+public:
+	void drawing() {
+		// Base
+		glBegin(GL_TRIANGLES);
+		glColor3f(1, 1, 0);
+		glVertex3f(-0.2, -0.2, -0.2);
+		glVertex3f(-0.2, 0.2, -0.2);
+		glVertex3f(-0.2, 0.2, 0.2);
+		glEnd();
+
+		glBegin(GL_TRIANGLES);
+		glColor3f(1, 1, 0);
+		glVertex3f(0.8, -0.2, -0.2);
+		glVertex3f(0.8, 0.2, -0.2);
+		glVertex3f(0.8, 0.2, 0.2);
+		glEnd();
+
+		// Red quads
+
+		glBegin(GL_QUADS);
+		glColor3f(1, 0, 0);
+		glVertex3f(-0.2, 0.2, 0.2);
+		glVertex3f(0.8, 0.2, 0.2);
+		glVertex3f(0.8, -0.2, -0.2);
+		glVertex3f(-0.2, -0.2, -0.2);
+		glEnd();
+
+		// Green quads
+
+		glBegin(GL_QUADS);
+		glColor3f(0, 1, 0);
+		glVertex3f(-0.2, 0.2, 0.2);
+		glVertex3f(0.8, 0.2, 0.2);
+		glVertex3f(0.8, 0.2, -0.2);
+		glVertex3f(-0.2, 0.2, -0.2);
+		glEnd();
+
+		// Red quads
+
+		glBegin(GL_QUADS);
+		glColor3f(0, 0, 1);
+		glVertex3f(-0.2, 0.2, -0.2);
+		glVertex3f(0.8, 0.2, -0.2);
+		glVertex3f(0.8, -0.2, -0.2);
+		glVertex3f(-0.2, -0.2, -0.2);
+		glEnd();
+	}
+};
 
 void drawBox()
 {
@@ -47,7 +101,7 @@ void drawBox()
 	glVertex3f(-0.2, 0.2, -0.2);
 	glEnd();
 
-	// Blue quads
+	// Red quads
 
 	glBegin(GL_QUADS);
 	glColor3f(0, 0, 1);
@@ -80,8 +134,10 @@ void display()
 		0.0f, 0.0f, 0.0f,
 		0.0f, 1.0f, 0.0f);
 
-	glRotatef(xrot, 1.0f, 0.0f, 0.0f);
-	glRotatef(yrot, 0.0f, 1.0f, 0.0f);
+	glRotatef(xrot, 1.0f, 0.0f, 0.0f); // Rotating horizontal
+	glRotatef(yrot, 0.0f, 1.0f, 0.0f); // Rotating vertical
+	glScalef(scale, scale, scale); // Scalling
+	glTranslatef(xmovement, ymovement, zmovement); // Translate / Movement
 
 	drawBox();
 
@@ -116,27 +172,52 @@ void idle()
 
 void keyboard(unsigned char key, int x, int y)
 {
-	switch (key)
-	{
+	switch (key){
+	case 'a':
+		yrot += 5.0f;
+		break;
+	case 'd':
+		yrot -= 5.0f;
+		break;
+	case 'w':
+		xrot += 5.0f;
+		break;
+	case 's':
+		xrot -= 5.0f;
+		break;
+	case '1':
+		scale += 0.2f;
+		break;
+	case '2':
+		scale -= 0.2f;
+		break;
 	case 27:
-		exit(1); break;
+		exit(1); 
+		break;
 	}
+
+	glutPostRedisplay();
 }
 
 void specialKeyboard(int key, int x, int y)
 {
-	if (key == GLUT_KEY_F1)
-	{
-		fullscreen = !fullscreen;
 
-		if (fullscreen)
-			glutFullScreen();
-		else
-		{
-			glutReshapeWindow(500, 500);
-			glutPositionWindow(50, 50);
-		}
+	switch (key) {
+	case 100:
+		xmovement -= 0.025f;
+		break;
+	case 101:
+		ymovement += 0.025f;
+		break;
+	case 102:
+		xmovement += 0.025f;
+		break;
+	case 103:
+		ymovement -= 0.025f;
+		break;
 	}
+
+	glutPostRedisplay();
 }
 
 void mouse(int button, int state, int x, int y)
