@@ -1,4 +1,5 @@
 #include <gl/glut.h>
+#include <iostream>
 
 float xrotation = 0.0f;
 float yrotation = 0.0f;
@@ -159,7 +160,7 @@ int main(int argc, char* argv[])
 {
 	glutInit(&argc, argv);
 
-	glutInitWindowPosition(50, 50);
+	glutInitWindowPosition(500, 50);
 	glutInitWindowSize(500, 500);
 
 	glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE);
@@ -170,6 +171,10 @@ int main(int argc, char* argv[])
 	glutKeyboardFunc(keyboard);
 	glutSpecialFunc(specialKeyboard);
 	glutReshapeFunc(resize);
+
+	std::cout << "1. Press WASD to rotate" << std::endl;
+	std::cout << "1. Press Arrow to translate" << std::endl;
+	std::cout << "1. Press 1 and 2 to scalling" << std::endl;
 
 	init();
 
