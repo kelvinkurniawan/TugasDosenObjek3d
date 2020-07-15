@@ -2,11 +2,8 @@
 
 bool mouseDown = false;
 
-float xrot = 0.0f;
-float yrot = 0.0f;
-
-float xdiff = 0.0f;
-float ydiff = 0.0f;
+float xrotation = 0.0f;
+float yrotation = 0.0f;
 
 float scale = 1.0f;
 float xmovement = 0.0f;
@@ -15,17 +12,17 @@ float zmovement = 0.0f;
 
 class myObject {
 public:
-	void drawing() {
+	void draw() {
 		// Base
 		glBegin(GL_TRIANGLES);
-		glColor3f(1, 1, 0);
+		glColor3ub(252, 187, 109);
 		glVertex3f(-0.2, -0.2, -0.2);
 		glVertex3f(-0.2, 0.2, -0.2);
 		glVertex3f(-0.2, 0.2, 0.2);
 		glEnd();
 
 		glBegin(GL_TRIANGLES);
-		glColor3f(1, 1, 0);
+		glColor3ub(216, 115, 127);
 		glVertex3f(0.8, -0.2, -0.2);
 		glVertex3f(0.8, 0.2, -0.2);
 		glVertex3f(0.8, 0.2, 0.2);
@@ -34,7 +31,7 @@ public:
 		// Red quads
 
 		glBegin(GL_QUADS);
-		glColor3f(1, 0, 0);
+		glColor3ub(104, 93, 121);
 		glVertex3f(-0.2, 0.2, 0.2);
 		glVertex3f(0.8, 0.2, 0.2);
 		glVertex3f(0.8, -0.2, -0.2);
@@ -44,7 +41,7 @@ public:
 		// Green quads
 
 		glBegin(GL_QUADS);
-		glColor3f(0, 1, 0);
+		glColor3ub(88, 40, 65);
 		glVertex3f(-0.2, 0.2, 0.2);
 		glVertex3f(0.8, 0.2, 0.2);
 		glVertex3f(0.8, 0.2, -0.2);
@@ -54,66 +51,23 @@ public:
 		// Red quads
 
 		glBegin(GL_QUADS);
-		glColor3f(0, 0, 1);
+		glColor3ub(71, 92, 122);
 		glVertex3f(-0.2, 0.2, -0.2);
 		glVertex3f(0.8, 0.2, -0.2);
 		glVertex3f(0.8, -0.2, -0.2);
 		glVertex3f(-0.2, -0.2, -0.2);
 		glEnd();
 	}
+
+	void transform() {
+		glRotatef(xrotation, 1.0f, 0.0f, 0.0f); // Rotating horizontal
+		glRotatef(yrotation, 0.0f, 1.0f, 0.0f); // Rotating vertical
+		glScalef(scale, scale, scale); // Scalling
+		glTranslatef(xmovement, ymovement, zmovement); // Translate / Movement
+	}
 };
 
-void drawBox()
-{
-
-	// Base
-	glBegin(GL_TRIANGLES);
-	glColor3f(1, 1, 0);
-	glVertex3f(-0.2, -0.2, -0.2);
-	glVertex3f(-0.2, 0.2, -0.2);
-	glVertex3f(-0.2, 0.2, 0.2);
-	glEnd();
-
-	glBegin(GL_TRIANGLES);
-	glColor3f(1, 1, 0);
-	glVertex3f(0.8, -0.2, -0.2);
-	glVertex3f(0.8, 0.2, -0.2);
-	glVertex3f(0.8, 0.2, 0.2);
-	glEnd();
-
-	// Red quads
-
-	glBegin(GL_QUADS);
-	glColor3f(1, 0, 0);
-	glVertex3f(-0.2, 0.2, 0.2);
-	glVertex3f(0.8, 0.2, 0.2);
-	glVertex3f(0.8, -0.2, -0.2);
-	glVertex3f(-0.2, -0.2, -0.2);
-	glEnd();
-
-	// Green quads
-
-	glBegin(GL_QUADS);
-	glColor3f(0, 1, 0);
-	glVertex3f(-0.2, 0.2, 0.2);
-	glVertex3f(0.8, 0.2, 0.2);
-	glVertex3f(0.8, 0.2, -0.2);
-	glVertex3f(-0.2, 0.2, -0.2);
-	glEnd();
-
-	// Red quads
-
-	glBegin(GL_QUADS);
-	glColor3f(0, 0, 1);
-	glVertex3f(-0.2, 0.2, -0.2);
-	glVertex3f(0.8, 0.2, -0.2);
-	glVertex3f(0.8, -0.2, -0.2);
-	glVertex3f(-0.2, -0.2, -0.2);
-	glEnd();
-
-}
-
-bool init()
+void init()
 {
 	glClearColor(0.93f, 0.93f, 0.93f, 0.0f);
 
@@ -121,11 +75,12 @@ bool init()
 	glDepthFunc(GL_LEQUAL);
 	glClearDepth(1.0f);
 
-	return true;
 }
 
 void display()
 {
+	myObject obj;
+
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
 
@@ -134,12 +89,8 @@ void display()
 		0.0f, 0.0f, 0.0f,
 		0.0f, 1.0f, 0.0f);
 
-	glRotatef(xrot, 1.0f, 0.0f, 0.0f); // Rotating horizontal
-	glRotatef(yrot, 0.0f, 1.0f, 0.0f); // Rotating vertical
-	glScalef(scale, scale, scale); // Scalling
-	glTranslatef(xmovement, ymovement, zmovement); // Translate / Movement
-
-	drawBox();
+	obj.transform();
+	obj.draw();
 
 	glFlush();
 	glutSwapBuffers();
@@ -159,31 +110,20 @@ void resize(int w, int h)
 }
 
 
-void idle()
-{
-	if (!mouseDown)
-	{
-		xrot += 0.3f;
-		yrot += 0.4f;
-	}
-
-	glutPostRedisplay();
-}
-
 void keyboard(unsigned char key, int x, int y)
 {
 	switch (key){
 	case 'a':
-		yrot += 5.0f;
+		yrotation += 5.0f;
 		break;
 	case 'd':
-		yrot -= 5.0f;
+		yrotation -= 5.0f;
 		break;
 	case 'w':
-		xrot += 5.0f;
+		xrotation += 5.0f;
 		break;
 	case 's':
-		xrot -= 5.0f;
+		xrotation -= 5.0f;
 		break;
 	case '1':
 		scale += 0.2f;
@@ -220,31 +160,6 @@ void specialKeyboard(int key, int x, int y)
 	glutPostRedisplay();
 }
 
-void mouse(int button, int state, int x, int y)
-{
-	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
-	{
-		mouseDown = true;
-
-		xdiff = x - yrot;
-		ydiff = -y + xrot;
-	}
-	else
-		mouseDown = false;
-}
-
-void mouseMotion(int x, int y)
-{
-	if (mouseDown)
-	{
-		yrot = x - xdiff;
-		xrot = y + ydiff;
-
-		glutPostRedisplay();
-	}
-}
-
-
 int main(int argc, char* argv[])
 {
 	glutInit(&argc, argv);
@@ -259,13 +174,9 @@ int main(int argc, char* argv[])
 	glutDisplayFunc(display);
 	glutKeyboardFunc(keyboard);
 	glutSpecialFunc(specialKeyboard);
-	glutMouseFunc(mouse);
-	glutMotionFunc(mouseMotion);
 	glutReshapeFunc(resize);
-	//glutIdleFunc(idle);
 
-	if (!init())
-		return 1;
+	init();
 
 	glutMainLoop();
 
