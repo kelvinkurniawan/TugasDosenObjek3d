@@ -1,7 +1,5 @@
 #include <gl/glut.h>
 
-bool mouseDown = false;
-
 float xrotation = 0.0f;
 float yrotation = 0.0f;
 
@@ -14,6 +12,7 @@ class myObject {
 public:
 	void draw() {
 		// Base
+
 		glBegin(GL_TRIANGLES);
 		glColor3ub(252, 187, 109);
 		glVertex3f(-0.2, -0.2, -0.2);
@@ -28,7 +27,7 @@ public:
 		glVertex3f(0.8, 0.2, 0.2);
 		glEnd();
 
-		// Red quads
+		// Side
 
 		glBegin(GL_QUADS);
 		glColor3ub(104, 93, 121);
@@ -38,8 +37,6 @@ public:
 		glVertex3f(-0.2, -0.2, -0.2);
 		glEnd();
 
-		// Green quads
-
 		glBegin(GL_QUADS);
 		glColor3ub(88, 40, 65);
 		glVertex3f(-0.2, 0.2, 0.2);
@@ -47,8 +44,6 @@ public:
 		glVertex3f(0.8, 0.2, -0.2);
 		glVertex3f(-0.2, 0.2, -0.2);
 		glEnd();
-
-		// Red quads
 
 		glBegin(GL_QUADS);
 		glColor3ub(71, 92, 122);
@@ -169,7 +164,7 @@ int main(int argc, char* argv[])
 
 	glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE);
 
-	glutCreateWindow("limas segitiga");
+	glutCreateWindow("Limas Segitiga - Tugas Dosen");
 
 	glutDisplayFunc(display);
 	glutKeyboardFunc(keyboard);
